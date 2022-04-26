@@ -53,14 +53,14 @@ namespace Lab2.Common
                 //   Data type of the pixels.
                 //   And finally, the actual pixels.
                 GL.TexImage2D(TextureTarget.Texture2D,
-                    0,
-                    PixelInternalFormat.Rgba,
+                    0, // Detail Level 
+                    PixelInternalFormat.Rgba, // Format
                     image.Width,
                     image.Height,
-                    0,
-                    PixelFormat.Bgra,
-                    PixelType.UnsignedByte,
-                    data.Scan0);
+                    0, // Deprecated
+                    PixelFormat.Bgra, // Bytes format
+                    PixelType.UnsignedByte, 
+                    data.Scan0); // Pixel array
             }
 
             // Now that our texture is loaded, we can set a few settings to affect how the image appears on rendering.

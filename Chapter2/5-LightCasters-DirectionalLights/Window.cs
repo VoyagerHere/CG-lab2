@@ -7,9 +7,6 @@ using OpenTK.Windowing.Desktop;
 
 namespace Lab2
 {
-    // This tutorial is split up into multiple different bits, one for each type of light.
-
-    // The following is the code for the directional light, a light that has a direction but no position.
     public class Window : GameWindow
     {
         private readonly float[] _vertices =
@@ -160,8 +157,10 @@ namespace Lab2
 
             GL.BindVertexArray(_vaoModel);
 
+            // Textures
             _diffuseMap.Use(TextureUnit.Texture0);
             _specularMap.Use(TextureUnit.Texture1);
+
             _lightingShader.Use();
 
             _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
@@ -184,6 +183,7 @@ namespace Lab2
             for (int i = 0; i < _cubePositions.Length; i++)
             {
                 // Then we translate said matrix by the cube position
+                // The model matrix consists of translations, scaling and/or rotations we'd like to apply to transform all object's vertices it to the global world space
                 Matrix4 model = Matrix4.CreateTranslation(_cubePositions[i]);
                 // We then calculate the angle and rotate the model around an axis
                 float angle = 20.0f * i;
