@@ -4,72 +4,17 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
+using System.Collections.Generic;
 
 namespace Lab2
 {
     public class Window : GameWindow
     {
-        private readonly float[] _vertices =
-        {
-            // Positions          Normals              Texture coords
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+        private List<RenderObjects> RenderObj = new List<RenderObjects>();
 
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-        };
-
-        // We draw multiple different cubes and it helps to store all
-        // their positions in an array for later when we want to draw them
-        private readonly Vector3[] _cubePositions =
-        {
-            new Vector3(0.0f, 0.0f, 0.0f),
-            new Vector3(2.0f, 5.0f, -15.0f),
-            new Vector3(-1.5f, -2.2f, -2.5f),
-            new Vector3(-3.8f, -2.0f, -12.3f),
-            new Vector3(2.4f, -0.4f, -3.5f),
-            new Vector3(-1.7f, 3.0f, -7.5f),
-            new Vector3(1.3f, -2.0f, -2.5f),
-            new Vector3(1.5f, 2.0f, -2.5f),
-            new Vector3(1.5f, 0.2f, -1.5f),
-            new Vector3(-1.3f, 1.0f, -1.5f)
-        };
+        private double _timeLimit = 100;
+        private double _time = 0;
 
         private readonly Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
@@ -83,9 +28,12 @@ namespace Lab2
 
         private Shader _lightingShader;
 
-        private Texture _diffuseMap;
+        /* Textures */
 
-        private Texture _specularMap;
+        private Texture tree_texture;
+        private Texture tree_texture_specular;
+
+
 
         private Camera _camera;
 
@@ -102,13 +50,18 @@ namespace Lab2
         {
             base.OnLoad();
 
+            Cylinder cyl = new Cylinder(0f, -10.0f, 7.3f, 6f, 1f);
+            Sphere sphere = new Sphere(1.3f, 0.0f, -10.0f, -6.5f);
+
+            _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
+
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
             GL.Enable(EnableCap.DepthTest);
 
-            _vertexBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
+            tree_texture = Texture.LoadFromFile("Resources/container2.png");
+            tree_texture_specular = Texture.LoadFromFile("Resources/container2.png");
+
 
             _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
             _lampShader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
@@ -141,10 +94,11 @@ namespace Lab2
                 GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
             }
 
-            _diffuseMap = Texture.LoadFromFile("Resources/container2.png");
-            _specularMap = Texture.LoadFromFile("Resources/container2_specular.png");
 
-            _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
+            RenderObj.Add(new RenderObjects(cyl.GetAllTogether(), cyl.GetIndices(), tree_texture, tree_texture_specular, _lampShader, 8));
+            RenderObj.Add(new RenderObjects(sphere.GetAllTogether(), sphere.GetIndices(), tree_texture, tree_texture_specular, _lampShader, 8));
+
+
 
             CursorGrabbed = true;
         }
@@ -155,11 +109,12 @@ namespace Lab2
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.BindVertexArray(_vaoModel);
+            // GL.BindVertexArray(_vaoModel);
 
             // Textures
-            _diffuseMap.Use(TextureUnit.Texture0);
-            _specularMap.Use(TextureUnit.Texture1);
+
+            // _diffuseMap.Use(TextureUnit.Texture0);
+            // _specularMap.Use(TextureUnit.Texture1);
 
             _lightingShader.Use();
 
@@ -179,7 +134,9 @@ namespace Lab2
             _lightingShader.SetVector3("light.diffuse", new Vector3(0.5f));
             _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
 
-            // We want to draw all the cubes at their respective positions
+            DrawSceneObjects();
+
+/*            // We want to draw all the cubes at their respective positions
             for (int i = 0; i < _cubePositions.Length; i++)
             {
                 // Then we translate said matrix by the cube position
@@ -193,8 +150,8 @@ namespace Lab2
 
                 // At last we draw all our cubes
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-            }
-
+            }*/
+/*
             GL.BindVertexArray(_vaoModel);
 
             _lampShader.Use();
@@ -205,8 +162,7 @@ namespace Lab2
             _lampShader.SetMatrix4("model", lampMatrix);
             _lampShader.SetMatrix4("view", _camera.GetViewMatrix());
             _lampShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
-
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);*/
 
             SwapBuffers();
         }
@@ -286,6 +242,41 @@ namespace Lab2
 
             GL.Viewport(0, 0, Size.X, Size.Y);
             _camera.AspectRatio = Size.X / (float)Size.Y;
+        }
+
+        public void DrawCylinder()
+        {
+            var Object = RenderObj[0];
+            var RotationMatrixX1 = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(90));
+            var model = Matrix4.Identity;
+            Object.Bind();
+            model *= RotationMatrixX1;
+            Object.ApplyTexture();
+            _lampShader.SetMatrix4("model", model);
+            _lampShader.SetMatrix4("view", _camera.GetViewMatrix());
+            _lampShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+            Object.Render();
+        }
+
+        public void DrawSphere()
+        {
+            var Object = RenderObj[1];
+            var RotationMatrixX1 = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(90));
+            var RotationMatrixX2 = Matrix4.CreateTranslation(0, (float)_timeLimit / 4, 0);
+            var model = Matrix4.Identity;
+            Object.Bind();
+            model *= RotationMatrixX1 * RotationMatrixX2;
+            Object.ApplyTexture();
+            _lampShader.SetMatrix4("model", model);
+            _lampShader.SetMatrix4("view", _camera.GetViewMatrix());
+            _lampShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+            Object.Render();
+        }
+
+        public void DrawSceneObjects()
+        {
+            DrawCylinder();
+            DrawSphere();
         }
     }
 }
