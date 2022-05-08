@@ -11,11 +11,20 @@ namespace Lab2
 
         private readonly float[] _vertices =
          {
-            0.25f, 0.0f, 0.0f,
-            -0.5f, -0.25f, 0.5f,
-            -0.5f, 0.0f, 0.0f, 
-            -0.5f, 0.25f, 0.5f,
+            0.5f, 0.0f, -0.5f,
+            0.0f, -0.25f, 0.0f,
+            0.0f, 0.0f, -0.5f, 
+            0.0f, 0.25f, 0.0f,
         };
+
+    /*    private readonly float[] _vertices =
+         {
+            1f, 0.0f, 0.0f,
+            0.0f, -0.25f, 0.5f,
+            0.0f, 0.0f, 0.0f,
+            0.0f, 0.25f, 0.5f,
+        };
+*/
 
 
         private readonly float[] _tex_coords =
