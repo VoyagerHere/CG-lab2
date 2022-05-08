@@ -11,10 +11,10 @@ namespace Lab2
 
         private readonly float[] _vertices =
          {
-             0.5f,  0.5f, 0.0f,
-             0.5f, -0.5f, 1.0f,
-            -0.5f, -0.5f, 1.0f, 
-            -0.5f,  0.5f, 0.0f,
+            0.25f, 0.0f, 0.0f,
+            -0.5f, -0.25f, 0.5f,
+            -0.5f, 0.0f, 0.0f, 
+            -0.5f, 0.25f, 0.5f,
         };
 
 
@@ -37,8 +37,8 @@ namespace Lab2
 
         private readonly int[] _indices =
         {
-            0, 1, 3,
-            1, 2, 3
+            0, 1, 2,
+            0, 2, 3,
         };
 
 
