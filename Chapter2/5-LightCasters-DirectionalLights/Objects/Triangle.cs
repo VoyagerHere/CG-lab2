@@ -8,32 +8,68 @@ namespace Lab2
 
     class Triangle
     {
-        public float r, x, y, z;
 
-        public Triangle(float x, float y, float z, float r)
+        private readonly float[] _vertices =
+         {
+             0.5f,  0.5f, 0.0f,
+             0.5f, -0.5f, 1.0f,
+            -0.5f, -0.5f, 1.0f, 
+            -0.5f,  0.5f, 0.0f,
+        };
+
+
+        private readonly float[] _tex_coords =
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.r = r;
-            this.GetVertecies();
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 0.0f,
+            0.0f, 1.0f
+        };
+
+
+        private readonly float[] _normals =
+        {
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+        };
+
+        private readonly int[] _indices =
+        {
+            0, 1, 3,
+            1, 2, 3
+        };
+
+
+
+        public float[] GetAllTogether()
+        {
+            List<float> result = new List<float>();
+            for (int i = 0; i < _vertices.Length / 3; ++i)
+            {
+                result.Add(_vertices[i * 3]);
+                result.Add(_vertices[i * 3 + 1]);
+                result.Add(_vertices[i * 3 + 2]);
+
+                result.Add(_normals[i * 3]);
+                result.Add(_normals[i * 3 + 1]);
+                result.Add(_normals[i * 3 + 2]);
+
+                result.Add(_tex_coords[i * 2]);
+                result.Add(_tex_coords[i * 2 + 1]);
+            }
+
+
+            return result.ToArray();
 
         }
 
-        public float[] GetVertecies()
+        public int[] GetIndices()
         {
-            float[] vertices = {
-                x - 0.5f,  y - 0.5f, 0.0f, //Bottom-left vertex
-                x + 0.5f,  y - 0.5f, 0.0f, //Bottom-right vertex
-                 0.0f,  y + 0.5f, 0.0f  //Top vertex
-            };
-            return vertices;
+            return _indices;
         }
 
-       /* public int[] GetIndices()
-        {
-
-        }*/
 
     }
 }

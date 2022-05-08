@@ -190,9 +190,9 @@ namespace Lab2
 
         public void DrawSceneObjects()
         {
+            DrawLightCube();
             DrawCylinder();
             DrawSphere();
-            DrawLightCube();
         }
 
         public void DrawCylinder()

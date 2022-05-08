@@ -30,6 +30,7 @@ void main()
 
     // diffuse 
     vec3 norm = normalize(Normal);
+    //  a darker diffuse component the greater the angle is between both vectors:
     vec3 lightDir = normalize(-light.direction);//We still normalize the light direction since we techically dont know,
                                                     //wether it was normalized for us or not.
     float diff = max(dot(norm, lightDir), 0.0);
