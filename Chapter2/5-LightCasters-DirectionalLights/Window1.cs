@@ -32,6 +32,8 @@ namespace Lab2
 
         private Vector2 _lastPos;
 
+        int RotateTriangle = 0;
+
         // StopWatch _timer;
 
         // double timeValue = _timer.Elapsed.TotalSeconds;
@@ -231,9 +233,8 @@ namespace Lab2
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
-
-            DrawSceneObjects(90);
-
+            RotateTriangle += 40;
+            DrawSceneObjects(RotateTriangle);
             SwapBuffers();
         }
 
@@ -360,9 +361,6 @@ namespace Lab2
 
         public void DrawTriange(int i, int r)
         {
-            float x = 2.0f;
-            float y = 9f;
-            float z = -8.5f;
             var Object = RenderObj[i];
             var RotationMatrixX1 = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(90));
             var RotationMatrixX3 = Matrix4.CreateRotationZ((float)MathHelper.DegreesToRadians(r));
@@ -381,7 +379,6 @@ namespace Lab2
 
         public void DrawSceneObjects(int rotate_tr)
         {
-            rotate_tr += 40;
             DrawCylinder1(0);
             DrawCylinder2(1);
             DrawSphere(2);
