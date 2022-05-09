@@ -54,7 +54,7 @@ namespace Lab2
         };
 
 
-        public float[] GetAllTogether()
+        public float[] Collect()
         {
             return _vertices;
         }

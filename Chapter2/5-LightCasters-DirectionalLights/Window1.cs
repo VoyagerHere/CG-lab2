@@ -34,12 +34,6 @@ namespace Lab2
 
         int RotateTriangle = 0;
 
-        // StopWatch _timer;
-
-        // double timeValue = _timer.Elapsed.TotalSeconds;
-
-
-
 
         private Texture _texture_tree;
         private Texture _texture_red;
@@ -136,8 +130,6 @@ namespace Lab2
             _lampShader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
 
-
-
             _texture_tree = Texture.LoadFromFile("Resources/tree.jpg");
             _texture_red = Texture.LoadFromFile("Resources/red.jpg");
             _texture_green = Texture.LoadFromFile("Resources/green.jpg");
@@ -166,27 +158,22 @@ namespace Lab2
                 GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
             }
 
-            RenderObj.Add(new RenderObjects(cl1.GetAllTogether(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(cl2.GetAllTogether(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(sp1.GetAllTogether(), sp1.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(cl3.GetAllTogether(), cl3.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(cl1.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(cl2.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(sp1.Collect(), sp1.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(cl3.Collect(), cl3.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
 
             // Triangles
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.GetAllTogether(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
-
-
-
-
-
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
 
             CursorGrabbed = true;
         }
@@ -233,7 +220,10 @@ namespace Lab2
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
-            RotateTriangle += 40;
+            // Rotate Speed
+            RotateTriangle += 10;
+            RotateTriangle %= 360;
+
             DrawSceneObjects(RotateTriangle);
             SwapBuffers();
         }

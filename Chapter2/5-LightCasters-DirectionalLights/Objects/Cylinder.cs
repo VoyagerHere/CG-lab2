@@ -14,15 +14,13 @@ namespace Lab2
         public List<int> Indices = new List<int>();
         public List<int> lineIndices = new List<int>();
 
-        public float baseRadius, height; //радиус цилиндра и его высота
-        public int sectorCount, stackCount; //количество секторов и стаков для отрисовки фигуры
+        public float baseRadius, height;
+        public int sectorCount, stackCount;
 
         private int baseCenterIndex;
         private int topCenterIndex;
 
-        float x, y, z; //координаты положения фигуры
-
-        //конструктор класса
+        float x, y, z;
         public Cylinder(float x, float y, float z, float baseRadius, float height, int sectorCount = 18, int stackCount = 36)
         {
             this.baseRadius = baseRadius;
@@ -34,62 +32,51 @@ namespace Lab2
             this.z = z;
             this.buildVerticesSmooth();
         }
-
-        //Создаются вертексы (точки) для окружностей цилиндра
         public List<float> getUnitCircleVertices()
         {
             const float PI = 3.1415926f;
             float sectorStep = 2 * PI / sectorCount;
-            float sectorAngle;  // radian
+            float sectorAngle;
 
             List<float> unitCircleVertices = new List<float>();
             for (int i = 0; i <= sectorCount; ++i)
             {
                 sectorAngle = i * sectorStep;
-                unitCircleVertices.Add((float)Math.Cos(sectorAngle)); // x
-                unitCircleVertices.Add((float)Math.Sin(sectorAngle)); // y
-                unitCircleVertices.Add(0);                // z
+                unitCircleVertices.Add((float)Math.Cos(sectorAngle));
+                unitCircleVertices.Add((float)Math.Sin(sectorAngle));
+                unitCircleVertices.Add(0);
             }
             return unitCircleVertices;
         }
-
-        //Создаются все вертексы для фигуры (а так ж нормали и текстурные координаты для них)
         public void buildVerticesSmooth()
         {
             List<float> unitVertices = getUnitCircleVertices();
             for (int i = 0; i < 2; ++i)
             {
-                float h = -height / 2.0f + i * height;           // z value; -h/2 to h/2
-                float t = 1.0f - i;                              // vertical tex coord; 1 to 0
+                float h = -height / 2.0f + i * height;
+                float t = 1.0f - i;
 
                 for (int j = 0, k = 0; j <= sectorCount; ++j, k += 3)
                 {
                     float ux = unitVertices[k];
                     float uy = unitVertices[k + 1];
                     float uz = unitVertices[k + 2];
-                    // position vector
-                    Vertecies.Add(ux * baseRadius + x);             // vx
-                    Vertecies.Add(uy * baseRadius + y);             // vy
-                    Vertecies.Add(h + z);                       // vz
-                                                                // normal vector
-                    Normals.Add(ux);                       // nx
-                    Normals.Add(uy);                       // ny
-                    Normals.Add(uz);                       // nz
-                                                           // texture coordinate
-                    TexCoords.Add((float)j / sectorCount); // s
-                    TexCoords.Add(t);                      // t
+                    Vertecies.Add(ux * baseRadius + x);
+                    Vertecies.Add(uy * baseRadius + y);
+                    Vertecies.Add(h + z);
+                    Normals.Add(ux);
+                    Normals.Add(uy);
+                    Normals.Add(uz);
+                    TexCoords.Add((float)j / sectorCount);
+                    TexCoords.Add(t);
                 }
             }
             baseCenterIndex = (int)Vertecies.Count / 3;
-            topCenterIndex = baseCenterIndex + sectorCount + 1; // include center vertex
-
-            // put base and top vertices to arrays
+            topCenterIndex = baseCenterIndex + sectorCount + 1;
             for (int i = 0; i < 2; ++i)
             {
-                float h = -height / 2.0f + i * height;           // z value; -h/2 to h/2
-                float nz = -1 + i * 2;                           // z value of normal; -1 to 1
-
-                // center point
+                float h = -height / 2.0f + i * height;
+                float nz = -1 + i * 2;
                 Vertecies.Add(0 + x); Vertecies.Add(0 + y); Vertecies.Add(h + z);
                 Normals.Add(0); Normals.Add(0); Normals.Add(nz);
                 TexCoords.Add(0.5f); TexCoords.Add(0.5f);
@@ -98,17 +85,14 @@ namespace Lab2
                 {
                     float ux = unitVertices[k];
                     float uy = unitVertices[k + 1];
-                    // position vector
-                    Vertecies.Add(ux * baseRadius + x);             // vx
-                    Vertecies.Add(uy * baseRadius + y);             // vy
-                    Vertecies.Add(h + z);                       // vz
-                                                                // normal vector
-                    Normals.Add(0);                        // nx
-                    Normals.Add(0);                        // ny
-                    Normals.Add(nz);                       // nz
-                                                           // texture coordinate
-                    TexCoords.Add(-ux * 0.5f + 0.5f);      // s
-                    TexCoords.Add(-uy * 0.5f + 0.5f);      // t
+                    Vertecies.Add(ux * baseRadius + x);
+                    Vertecies.Add(uy * baseRadius + y);
+                    Vertecies.Add(h + z);
+                    Normals.Add(0);
+                    Normals.Add(0);
+                    Normals.Add(nz);
+                    TexCoords.Add(-ux * 0.5f + 0.5f);
+                    TexCoords.Add(-uy * 0.5f + 0.5f);
                 }
             }
             return;
@@ -122,8 +106,6 @@ namespace Lab2
         {
             return Vertecies.ToArray();
         }
-
-        //Создаются и возвращаются индексы
         public int[] GetIndices()
         {
             int k1 = 0;
@@ -131,21 +113,13 @@ namespace Lab2
 
             for (int i = 0; i < sectorCount; ++i, ++k1, ++k2)
             {
-                // 2 triangles per sector
-                // k1 => k1+1 => k2
                 Indices.Add(k1);
                 Indices.Add(k1 + 1);
                 Indices.Add(k2);
-
-                // k2 => k1+1 => k2+1
                 Indices.Add(k2);
                 Indices.Add(k1 + 1);
                 Indices.Add(k2 + 1);
             }
-
-            // Indices for the base surface
-            //NOTE: baseCenterIndex and topCenterIndices are pre-computed during vertex generation
-            //      please see the previous code snippet
             for (int i = 0, k = baseCenterIndex + 1; i < sectorCount; ++i, ++k)
             {
                 if (i < sectorCount - 1)
@@ -154,15 +128,13 @@ namespace Lab2
                     Indices.Add(k + 1);
                     Indices.Add(k);
                 }
-                else // last triangle
+                else
                 {
                     Indices.Add(baseCenterIndex);
                     Indices.Add(baseCenterIndex + 1);
                     Indices.Add(k);
                 }
             }
-
-            // Indices for the top surface
             for (int i = 0, k = topCenterIndex + 1; i < sectorCount; ++i, ++k)
             {
                 if (i < sectorCount - 1)
@@ -171,7 +143,7 @@ namespace Lab2
                     Indices.Add(k);
                     Indices.Add(k + 1);
                 }
-                else // last triangle
+                else
                 {
                     Indices.Add(topCenterIndex);
                     Indices.Add(k);
@@ -183,7 +155,7 @@ namespace Lab2
             return Indices.ToArray();
         }
 
-        public float[] GetAllTogether()
+        public float[] Collect()
         {
             List<float> result = new List<float>();
 

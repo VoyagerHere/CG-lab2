@@ -24,8 +24,6 @@ namespace Lab2
             this.Z = Z;
             this.sectorCount = sectorCount;
             this.stackCount = stackCount;
-
-            //////////////////
             this.GetVertecies();
             this.GetIndices();
         }
@@ -39,9 +37,9 @@ namespace Lab2
         {
             const float PI = 3.1415926f;
 
-            float x, y, z, xy;                              // vertex position
-            float nx, ny, nz, lengthInv = 1.0f / R;    // vertex normal
-            float s, t;                                     // vertex texCoord
+            float x, y, z, xy;
+            float nx, ny, nz, lengthInv = 1.0f / R;
+            float s, t;
 
             float sectorStep = 2 * PI / sectorCount;
             float stackStep = PI / stackCount;
@@ -49,29 +47,23 @@ namespace Lab2
 
             for (int i = 0; i <= stackCount; ++i)
             {
-                stackAngle = PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
-                xy = R * (float)Math.Cos(stackAngle);             // r * cos(u)
-                z = R * (float)Math.Sin(stackAngle) + Z;              // r * sin(u)
+                stackAngle = PI / 2 - i * stackStep;
+                xy = R * (float)Math.Cos(stackAngle);
+                z = R * (float)Math.Sin(stackAngle) + Z;
                 for (int j = 0; j <= sectorCount; ++j)
                 {
-                    sectorAngle = j * sectorStep;           // starting from 0 to 2pi
-
-                    // vertex position (x, y, z)
-                    x = xy * (float)Math.Cos(sectorAngle) + X;             // r * cos(u) * cos(v)
-                    y = xy * (float)Math.Sin(sectorAngle) + Y;             // r * cos(u) * sin(v)
+                    sectorAngle = j * sectorStep;
+                    x = xy * (float)Math.Cos(sectorAngle) + X;
+                    y = xy * (float)Math.Sin(sectorAngle) + Y;
                     Vertecies.Add(x);
                     Vertecies.Add(y);
                     Vertecies.Add(z);
-
-                    // normalized vertex normal (nx, ny, nz)
                     nx = x * lengthInv;
                     ny = y * lengthInv;
                     nz = z * lengthInv;
                     Normals.Add(nx);
                     Normals.Add(ny);
                     Normals.Add(nz);
-
-                    // vertex tex coord (s, t) range between [0, 1]
                     s = (float)j / sectorCount;
                     t = (float)i / stackCount;
                     TexCoords.Add(s);
@@ -88,33 +80,26 @@ namespace Lab2
 
             for (int i = 0; i < stackCount; ++i)
             {
-                k1 = i * (sectorCount + 1);     // beginning of current stack
-                k2 = k1 + sectorCount + 1;      // beginning of next stack
+                k1 = i * (sectorCount + 1);
+                k2 = k1 + sectorCount + 1;
 
                 for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
                 {
-                    // 2 triangles per sector excluding first and last stacks
-                    // k1 => k2 => k1+1
                     if (i != 0)
                     {
                         Indices.Add(k1);
                         Indices.Add(k2);
                         Indices.Add(k1 + 1);
                     }
-
-                    // k1+1 => k2 => k2+1
                     if (i != (stackCount - 1))
                     {
                         Indices.Add(k1 + 1);
                         Indices.Add(k2);
                         Indices.Add(k2 + 1);
                     }
-
-                    // store indices for lines
-                    // vertical lines for all stacks, k1 => k2
                     lineIndices.Add(k1);
                     lineIndices.Add(k2);
-                    if (i != 0)  // horizontal lines except 1st stack, k1 => k+1
+                    if (i != 0)
                     {
                         lineIndices.Add(k1);
                         lineIndices.Add(k1 + 1);
@@ -127,7 +112,7 @@ namespace Lab2
         }
 
 
-        public float[] GetAllTogether()
+        public float[] Collect()
         {
             List<float> result = new List<float>();
 

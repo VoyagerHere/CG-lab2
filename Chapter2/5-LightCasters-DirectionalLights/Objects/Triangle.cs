@@ -17,16 +17,6 @@ namespace Lab2
             0.0f, 0.25f, 0.0f,
         };
 
-    /*    private readonly float[] _vertices =
-         {
-            1f, 0.0f, 0.0f,
-            0.0f, -0.25f, 0.5f,
-            0.0f, 0.0f, 0.0f,
-            0.0f, 0.25f, 0.5f,
-        };
-*/
-
-
         private readonly float[] _tex_coords =
         {
             1.0f, 1.0f,
@@ -52,7 +42,7 @@ namespace Lab2
 
 
 
-        public float[] GetAllTogether()
+        public float[] Collect()
         {
             List<float> result = new List<float>();
             for (int i = 0; i < _vertices.Length / 3; ++i)
