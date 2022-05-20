@@ -22,6 +22,7 @@ namespace Lab2.Common
             // For this example, we're going to use .NET's built-in System.Drawing library to load textures.
 
             // Load the image
+
             using (var image = new Bitmap(path))
             {
                 // Our Bitmap loads from the top-left pixel, whereas OpenGL loads from the bottom-left, causing the texture to be flipped vertically.
@@ -53,14 +54,14 @@ namespace Lab2.Common
                 //   Data type of the pixels.
                 //   And finally, the actual pixels.
                 GL.TexImage2D(TextureTarget.Texture2D,
-                    0, // Detail Level 
-                    PixelInternalFormat.Rgba, // Format
+                    0,
+                    PixelInternalFormat.Rgba,
                     image.Width,
                     image.Height,
-                    0, // Deprecated
-                    PixelFormat.Bgra, // Bytes format
-                    PixelType.UnsignedByte, 
-                    data.Scan0); // Pixel array
+                    0,
+                    PixelFormat.Bgra,
+                    PixelType.UnsignedByte,
+                    data.Scan0);
             }
 
             // Now that our texture is loaded, we can set a few settings to affect how the image appears on rendering.

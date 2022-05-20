@@ -18,14 +18,12 @@ namespace Lab2
         private int _vertexBufferObject;
 
         private int _vaoModel;
-
         private int _vaoLamp;
+
 
         private Shader _lampShader;
 
         private Shader _lightingShader;
-        private double _timeLimit = 100;
-
         private Camera _camera;
 
         private bool _firstMove = true;
@@ -110,7 +108,6 @@ namespace Lab2
             Sphere sp1 = new Sphere(0.2f, 0.0f, 7.0f, -7.3f); 
             Cylinder cl2 = new Cylinder(0.0f, 7.0f, -9.0f, 0.1f, 3f); // Horizontal
             Cylinder cl3 = new Cylinder(0.0f, 7.0f, -7.4f, 0.8f, 0.3f);  // Disk
-            Cylinder cl4 = new Cylinder(0f, -10.0f, 7.3f, 6f, 1f);
             Triangle tr = new Triangle();
 
 
@@ -141,22 +138,21 @@ namespace Lab2
             _texture_specular_yellow = Texture.LoadFromFile("Resources/yellow_specular.jpg");
             _texture_specular_blue = Texture.LoadFromFile("Resources/blue_specular.jpg");
 
+            // Light Cube
             {
-                _vaoModel = GL.GenVertexArray();
-                GL.BindVertexArray(_vaoModel);
+                _vaoLamp = GL.GenVertexArray();
+                GL.BindVertexArray(_vaoLamp);
 
-                var positionLocation = _lightingShader.GetAttribLocation("aPos");
+                GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+
+                var positionLocation = _lampShader.GetAttribLocation("aPos");
                 GL.EnableVertexAttribArray(positionLocation);
                 GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
-
-                var normalLocation = _lightingShader.GetAttribLocation("aNormal");
-                GL.EnableVertexAttribArray(normalLocation);
-                GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
-
-                var texCoordLocation = _lightingShader.GetAttribLocation("aTexCoords");
-                GL.EnableVertexAttribArray(texCoordLocation);
-                GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
             }
+
+
+            _lightingShader.Use();
+            SetShader(_lightingShader);
 
             RenderObj.Add(new RenderObjects(cl1.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
             RenderObj.Add(new RenderObjects(cl2.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
@@ -176,21 +172,11 @@ namespace Lab2
             RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
 
             CursorGrabbed = true;
+
         }
 
-        protected override void OnRenderFrame(FrameEventArgs e)
+        private void SetShader(Shader _lightingShader)
         {
-            base.OnRenderFrame(e);
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-
-            // Textures
-            GL.BindVertexArray(_vaoModel);
-
-
-            _lightingShader.Use();
-
             _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
             _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
 
@@ -199,16 +185,35 @@ namespace Lab2
             _lightingShader.SetInt("material.diffuse", 0);
             _lightingShader.SetInt("material.specular", 1);
             _lightingShader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
-            _lightingShader.SetFloat("material.shininess", 1000.0f);
+            _lightingShader.SetFloat("material.shininess", 32.0f);
 
             // Directional light needs a direction, in this example we just use (-0.2, -1.0, -0.3f) as the lights direction
             _lightingShader.SetVector3("light.direction", new Vector3(-0.2f, -1.0f, -0.3f));
             _lightingShader.SetVector3("light.ambient", new Vector3(0.2f));
             _lightingShader.SetVector3("light.diffuse", new Vector3(0.5f));
             _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
+        }
 
+
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            base.OnRenderFrame(e);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.BindVertexArray(_vaoModel);
+
+
+            _lightingShader.Use();
+            SetShader(_lightingShader);
+
+            // Rotate Speed
+            RotateTriangle += 10;
+            RotateTriangle %= 360;
+
+            DrawSceneObjects(RotateTriangle);
+
+            GL.BindVertexArray(_vaoLamp);
             _lampShader.Use();
 
             Matrix4 lampMatrix = Matrix4.CreateScale(2.2f);
@@ -220,11 +225,7 @@ namespace Lab2
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
-            // Rotate Speed
-            RotateTriangle += 10;
-            RotateTriangle %= 360;
 
-            DrawSceneObjects(RotateTriangle);
             SwapBuffers();
         }
 

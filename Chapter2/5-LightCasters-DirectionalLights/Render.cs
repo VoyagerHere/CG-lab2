@@ -17,13 +17,11 @@ namespace Lab2
         public readonly int indicesLenght;
         Texture Diffuse, Specular;
         Shader shader;
-        int shader_type;
-        public RenderObjects(float[] _vertices, int[] _indices, Texture diffuse, Texture specular, Shader shader, int stride, int shader_type = 0)
+        public RenderObjects(float[] _vertices, int[] _indices, Texture diffuse, Texture specular, Shader shader, int stride)
         {
             this.Diffuse = diffuse;
             this.shader = shader;
             this.Specular = specular;
-            this.shader_type = shader_type;
             indicesLenght = _indices.Length;
 
             GL.BindVertexArray(_vertexArrayObject);
@@ -54,7 +52,7 @@ namespace Lab2
 
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.DynamicDraw);//staticDraw
+            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.DynamicDraw);
         }
 
         public void RenderCube()
