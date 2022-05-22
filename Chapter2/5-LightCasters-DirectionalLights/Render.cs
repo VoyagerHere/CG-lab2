@@ -17,42 +17,43 @@ namespace Lab2
         public readonly int indicesLenght;
         Texture Diffuse, Specular;
         Shader shader;
-        public RenderObjects(float[] _vertices, int[] _indices, Texture diffuse, Texture specular, Shader shader, int stride)
+        public RenderObjects(float[] _vertices, int[] _indices, Texture diffuse, Texture specular, Shader shader)
         {
-            this.Diffuse = diffuse;
-            this.shader = shader;
-            this.Specular = specular;
             indicesLenght = _indices.Length;
-
-            GL.BindVertexArray(_vertexArrayObject);
+            this.shader = shader;
+            this.Diffuse = diffuse;
+            this.Specular = specular;
+            this.Bind();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
 
-            GL.NamedBufferStorage(_vertexBufferObject,
-               _vertices.Length * sizeof(float),        
-               _vertices,                           
-               BufferStorageFlags.MapWriteBit
-            );    
+            GL.NamedBufferStorage(
+               _vertexBufferObject,
+               _vertices.Length * sizeof(float),        // the size needed by this buffer
+               _vertices,                           // data to initialize with
+               BufferStorageFlags.MapWriteBit);    // at this point we will only write to the buffer
 
             GL.VertexArrayAttribBinding(_vertexArrayObject, 0, 0);
             GL.EnableVertexArrayAttrib(_vertexArrayObject, 0);
 
-            var positionLocation = shader.GetAttribLocation("aPosition");
+            var positionLocation = shader.GetAttribLocation("aPos​");
             GL.EnableVertexAttribArray(positionLocation);
-            GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, stride * sizeof(float), 0);
+            GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
 
             var normalLocation = shader.GetAttribLocation("aNormal");
             GL.EnableVertexAttribArray(normalLocation);
-            GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, stride * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
 
-            var texCoordLocation = shader.GetAttribLocation("aTexCoord");
+            var texCoordLocation = shader.GetAttribLocation("aTexCoords");
             GL.EnableVertexAttribArray(texCoordLocation);
-            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, stride * sizeof(float), 6 * sizeof(float));
+            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
 
-            GL.VertexArrayVertexBuffer(_vertexArrayObject, 0, _vertexBufferObject, IntPtr.Zero, stride * sizeof(float));
-
+            GL.VertexArrayVertexBuffer(_vertexArrayObject, 0, _vertexBufferObject, IntPtr.Zero, 8 * sizeof(float));
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
             GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.DynamicDraw);
+
+            
         }
 
         public void RenderCube()
@@ -68,6 +69,24 @@ namespace Lab2
         public void Render()
         {
             GL.DrawElements(PrimitiveType.Triangles, indicesLenght, DrawElementsType.UnsignedInt, 0);
+        }
+
+        public void ShaderAttribute()
+        {
+            this.Bind();
+
+            var positionLocation = shader.GetAttribLocation("aPos​");
+            GL.EnableVertexAttribArray(positionLocation);
+            GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+
+            var normalLocation = shader.GetAttribLocation("aNormal");
+            GL.EnableVertexAttribArray(normalLocation);
+            GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+
+            var texCoordLocation = shader.GetAttribLocation("aTexCoords");
+            GL.EnableVertexAttribArray(texCoordLocation);
+            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
+
         }
 
         public void ApplyTexture()

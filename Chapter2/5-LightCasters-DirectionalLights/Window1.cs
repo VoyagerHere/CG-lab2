@@ -17,7 +17,6 @@ namespace Lab2
 
         private int _vertexBufferObject;
 
-        private int _vaoModel;
         private int _vaoLamp;
 
 
@@ -151,25 +150,24 @@ namespace Lab2
             }
 
 
-            _lightingShader.Use();
             SetShader(_lightingShader);
 
-            RenderObj.Add(new RenderObjects(cl1.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(cl2.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(sp1.Collect(), sp1.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(cl3.Collect(), cl3.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(cl1.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader));
+            RenderObj.Add(new RenderObjects(cl2.Collect(), cl1.GetIndices(), _texture_tree, _texture_specular_tree, _lightingShader));
+            RenderObj.Add(new RenderObjects(sp1.Collect(), sp1.GetIndices(), _texture_red, _texture_specular_red, _lightingShader));
+            RenderObj.Add(new RenderObjects(cl3.Collect(), cl3.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader));
 
             // Triangles
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader, 8));
-            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader, 8));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_yellow, _texture_specular_yellow, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_green, _texture_specular_green, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_red, _texture_specular_red, _lightingShader));
+            RenderObj.Add(new RenderObjects(tr.Collect(), tr.GetIndices(), _texture_blue, _texture_specular_blue, _lightingShader));
 
             CursorGrabbed = true;
 
@@ -201,7 +199,6 @@ namespace Lab2
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.BindVertexArray(_vaoModel);
 
 
             _lightingShader.Use();
@@ -372,7 +369,6 @@ namespace Lab2
         {
             DrawCylinder1(0);
             DrawCylinder2(1);
-            DrawSphere(2);
             DrawCylinder2(3);
             DrawTriange(4, 0 + rotate_tr);
             DrawTriange(5, 40 + rotate_tr);
@@ -380,10 +376,13 @@ namespace Lab2
             DrawTriange(7, 120 + rotate_tr);
             DrawTriange(8, 160 + rotate_tr);
             DrawTriange(9, 180 + rotate_tr);
-            DrawTriange(10, 220  + rotate_tr);
+            DrawTriange(10, 220 + rotate_tr);
             DrawTriange(11, 260 + rotate_tr);
             DrawTriange(12, 300 + rotate_tr);
-            DrawTriange(13, 340 + rotate_tr); 
+            DrawTriange(13, 340 + rotate_tr);
+            DrawSphere(2);
+
+
         }
     }
 }
